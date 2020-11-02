@@ -1,46 +1,60 @@
 // 10 frames, 2 opportunities each
 function BowlingGame() {
-    let frame   = 0, 
-    myScore     = 0,  
-    pAttempt    = 0,
-    finalScore  = 0;
+    let frame = 0,
+        myScore = 0,
+        pAttempt = 0,
+        finalScore = 0;
 
     //Player throws the ball
     this.roll = function () {
-        //For loop might be needed to take control of player
-        //attempt
-        if (pAttempt == 10)
+        let tempScore = 0; //Variable for storing player score per frame 
+
+        if (frame == 10)
             throw new Error('Player has played 10 frames already!');
 
-        pAttempt++;
+        for (let i = 0; i < 2; i++) {
+            pAttempt++;
+            myScore = Math.floor(Math.random() * 11);
 
+            tempScore += myScore
+            finalScore += myScore;
+
+            console.log('Atempt number ' + [i + 1]);
+            console.log("player has scored " + myScore + " on attempt " + [i + 1]);
+            if (tempScore === 10 && i == 1)
+                this.spare()
+            if (myScore === 10) {
+                i == 0 ? this.strike() : this.spare();
+                break;
+            }
+        }
+
+        console.log('Your final score is: ' + finalScore);
+        frame++;
+        console.log('Frame No. ' + frame);
+    }
+
+    //Spare only gets points from next roll
+    this.spare = function () {
+        console.log('Spare!')
         myScore = Math.floor(Math.random() * 11);
         finalScore += myScore;
-
-        console.log("player has scored " + myScore);
-        console.log('Atempt number ' + pAttempt);
-        console.log('Your final score is: ' + finalScore);
-
-        if (myScore == 10 && pAttempt == 1) {
-            this.strike();
-            //break;
-        }
-        if (pAttempt == 2 && myScore == 10) {
-            spare = true;
-            console.log('Player earned a spare!');
-            this.spare();
-        }
-        else
-            frame++;
-    }
-
-    this.spare = function () {
-        myScore = Math.floor(Math.random() * 11);
         console.log("player has scored " + myScore + " in spare turn");
     }
-
+    //If player gets a strike, it'll make a new strike
     this.strike = function () {
         console.log('Strike!')
+
+        for (let i = 0; i < 2; i++) {
+            myScore = Math.floor(Math.random() * 11);
+            console.log("player has scored " + myScore + " in strike turn");
+
+            finalScore += myScore;
+            if (myScore === 10) {
+                console.log('Strike!')
+                break;
+            }
+        }
         frame++;
     }
     //Getter
