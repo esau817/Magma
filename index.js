@@ -2,32 +2,38 @@
 function BowlingGame() {
     let frame = 0,
         myScore = 0,
-        pAttempt = 0,
+        myScore2 = 0,
         finalScore = 0;
 
     //Player throws the ball
     this.roll = function () {
-        let tempScore = 0; //Variable for storing player score per frame 
-
         if (frame == 10)
             throw new Error('Player has played 10 frames already!');
 
-        for (let i = 0; i < 2; i++) {
-            pAttempt++;
-            myScore = Math.floor(Math.random() * 11);
+        let tempScore = 0; //Variable for storing player score per frame 
 
-            tempScore += myScore
+        myScore = Math.floor(Math.random() * 11);
+        tempScore += myScore
+        console.log("player has scored " + myScore);
+        //console.log(myScore);
+        if (myScore === 10) {
+            this.strike();
             finalScore += myScore;
-
-            console.log('Atempt number ' + [i + 1]);
-            console.log("player has scored " + myScore + " on attempt " + [i + 1]);
-            if (tempScore === 10 && i == 1)
-                this.spare()
-            if (myScore === 10) {
-                i == 0 ? this.strike() : this.spare();
-                break;
-            }
+            console.log('Your final score is: ' + finalScore)
+            return;
         }
+
+        myScore2 = Math.floor(Math.random() * (11 - myScore));
+
+        console.log("player has scored " + myScore2);
+        
+        if (myScore + myScore2 == 10){
+            finalScore += myScore + myScore2;
+            this.spare();
+            return;
+        }
+
+        finalScore += myScore + myScore2;
 
         console.log('Your final score is: ' + finalScore);
         frame++;
@@ -40,27 +46,26 @@ function BowlingGame() {
         myScore = Math.floor(Math.random() * 11);
         finalScore += myScore;
         console.log("player has scored " + myScore + " in spare turn");
+        console.log('Your final score is: ' + finalScore);
     }
     //If player gets a strike, it'll make a new strike
     this.strike = function () {
         console.log('Strike!')
 
-        for (let i = 0; i < 2; i++) {
-            myScore = Math.floor(Math.random() * 11);
-            console.log("player has scored " + myScore + " in strike turn");
-
-            finalScore += myScore;
-            if (myScore === 10) {
-                console.log('Strike!')
-                break;
-            }
+        myScore = Math.floor(Math.random() * 11);
+        console.log("player has scored " + myScore + " in strike turn");
+        finalScore += (myScore * 2);
+        if (myScore === 10) {
+            console.log('You just got another Strike!')
+            finalScore += 10;
+            return;
         }
+
+        myScore2 = Math.floor(Math.random() * (11 - myScore));
+        console.log("player has scored " + myScore2 + " in strike turn");
+
         frame++;
     }
-    //Getter
-    Object.defineProperty(this, 'pAttempt', {
-        get: function () { return pAttempt; }
-    });
 }
 //const playBowl = new BowlingGame();
 
@@ -79,3 +84,10 @@ function BowlingGame() {
 //In the tenth frame a player who rolls a spare or strike is allowed to roll 
 //the extra balls to complete the frame. However no more than three balls can be 
 //rolled in tenth frame.
+
+
+// 2 más, si hace un spare tiró todas, 2 spare maximos
+// en strike 1 tiro mas, si hace otro strike ya no se puede hacer mas
+// tiro normal son dos bolas 
+
+// 
